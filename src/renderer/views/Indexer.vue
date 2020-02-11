@@ -5,10 +5,7 @@
     </div>
     <div class="code_area">
       <div class="code_container">
-        <pre v-highlightjs="code">
-          <code class="pgsql">
-          </code>
-        </pre>
+        <PrismEditor :lineNumbers="true" :code="code" language="sql"></PrismEditor>
       </div>
     </div>
     <div class="indexes_container">
@@ -19,9 +16,17 @@
 
 <script>
   import { ipcRenderer } from 'electron'
+  import Prism from 'prismjs'
+  import PrismEditor from 'vue-prism-editor'
+  import 'prismjs/themes/prism.css'
+  import 'vue-prism-editor/dist/VuePrismEditor.css'
 
   export default {
     name: 'indexer',
+    components: {
+      Prism,
+      PrismEditor
+    },
     data () {
       return {
         objectList: [],
@@ -64,7 +69,7 @@
       this.fnGetConnectionInfo()
       this.fnGetThemes()
       const sqlString = `
-      FUNCTION        SF_DC_MAIN
+FUNCTION        SF_DC_MAIN
 ( P_CI_NO                   IN     VARCHAR2,      -- 체크인번호(신규변경 2015.08.05 지역코드>>체크인번호)
   P_MEM_NO                  IN     VARCHAR2,      -- 회원번호(우대번호) 
   P_CI_YMD                  IN     VARCHAR2,      -- 체크인일자
@@ -2230,8 +2235,5 @@ END;
   div.indexer_container {height: calc(100% - 60px);}
   div.object_container {width: 25%; height: 100%; float: left; border-right: 1px solid #ccc;}
   div.code_area {width: 50%; height: 100%; float: left; border-right: 1px solid #ccc;}
-  div.code_container {width: 100%; height: 100%; overflow: auto;}
   div.indexes_container {width: 25%; height: 100%; float: left;}
-
-  .hljs {overflow: visible; width: fit-content; user-select: text;}
 </style>

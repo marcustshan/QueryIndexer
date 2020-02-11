@@ -56,11 +56,12 @@
     }
   },
   "dependencies": {
-    "highlight.js": "^9.18.1",
     "oracledb": "^4.2.0",
+    "prismjs": "^1.19.0",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
     "vue-moment": "^4.1.0",
+    "vue-prism-editor": "^0.4.3",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "vuex-electron": "^1.0.0"
