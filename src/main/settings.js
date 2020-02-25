@@ -8,11 +8,14 @@ export class Settings {
     this.path = path.join(userDataPath, 'settings.json')
 
     if (!fs.existsSync(this.path)) {
-      fs.writeFileSync(this.path, '{}', 'utf8')
+      fs.writeFileSync(this.path, JSON.stringify(opts.defaults), 'utf8')
     }
 
     try {
       this.data = JSON.parse(fs.readFileSync(this.path, 'utf8'))
+      if (Object.keys(this.data).length < 1) {
+        this.data = opts.defaults
+      }
     } catch (error) {
       this.data = opts.defaults
     }

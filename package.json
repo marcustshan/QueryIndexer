@@ -1,6 +1,6 @@
 {
   "name": "query-indexer",
-  "version": "0.0.1",
+  "version": "0.9.0",
   "author": "tshan <hts0215@naver.com>",
   "description": "Oracle Query Indexer",
   "license": null,
@@ -49,19 +49,21 @@
       "icon": "build/icons/icon.icns"
     },
     "win": {
-      "icon": "build/icons/icon.ico"
+      "icon": "src/renderer/assets/icons/win/icon.ico"
     },
     "linux": {
       "icon": "build/icons"
     }
   },
   "dependencies": {
+    "dom-iterator": "^1.0.0",
     "oracledb": "^4.2.0",
     "prismjs": "^1.19.0",
+    "unescape": "^1.0.1",
     "vue": "^2.5.16",
     "vue-electron": "^1.0.6",
+    "vue-lodash": "^2.0.2",
     "vue-moment": "^4.1.0",
-    "vue-prism-editor": "^0.4.3",
     "vue-router": "^3.0.1",
     "vuex": "^3.0.1",
     "vuex-electron": "^1.0.0"

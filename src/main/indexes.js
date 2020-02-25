@@ -8,7 +8,7 @@ export class Indexes {
     this.path = path.join(userDataPath, 'indexes.json')
 
     if (!fs.existsSync(this.path)) {
-      fs.writeFileSync(this.path, '{}', 'utf8')
+      fs.writeFileSync(this.path, '', 'utf8')
     }
 
     try {

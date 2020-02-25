@@ -7,7 +7,18 @@ const state = {
   serviceName: '',
   user: '',
   password: '',
-  rememberConnection: ''
+  rememberConnection: '',
+  pool: {}
+}
+
+const getters = {
+  connectionObj: state => {
+    return {
+      user: state.user,
+      password: state.password,
+      connectString: `${state.host}/${state.serviceName}`
+    }
+  }
 }
 
 const actions = {
@@ -25,6 +36,9 @@ const actions = {
   },
   setRememberConnection(context, value) {
     context.commit('setRememberConnection', value)
+  },
+  setPool(context, value) {
+    context.commit('setPool', value)
   }
 }
 
@@ -43,11 +57,15 @@ const mutations = {
   },
   setRememberConnection(state, value) {
     state.rememberConnection = value
+  },
+  setPool(state, value) {
+    state.pool = value
   }
 }
 
 export default {
   state,
+  getters,
   actions,
   mutations
 }

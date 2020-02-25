@@ -35,6 +35,7 @@
 
 <script>
   import { ipcRenderer } from 'electron'
+  import { dbUtil } from '../util/db-util'
 
   export default {
     name: 'index',
@@ -44,7 +45,8 @@
         serviceName: '',
         user: '',
         password: '',
-        rememberConnection: ''
+        rememberConnection: '',
+        connection: {}
       }
     },
     methods: {
@@ -75,20 +77,27 @@
             rememberConnection: this.rememberConnection
           })
         }
-        this.$router.push('/indexer')
+  
+        dbUtil.setConnection(this.$store.getters.connectionObj).then(result => {
+          if (result.status === 'OK') {
+            this.$store.dispatch('setPool', result.pool)
+            this.$router.push('/indexer')
+          } else {
+            this.alert(result.error)
+          }
+        }).catch(error => {
+          this.alert(error)
+        })
       },
       fnGetConnectionInfo () {
-        ipcRenderer.on('get_connection', (event, connection) => {
-          if (connection) {
-            this.host = connection.host
-            this.serviceName = connection.serviceName
-            this.user = connection.user
-            this.password = connection.password
-            this.rememberConnection = connection.rememberConnection
-          }
-        })
-
-        ipcRenderer.send('get_connection')
+        let connection = ipcRenderer.sendSync('get_connection')
+        if (connection && Object.keys(connection).length > 0) {
+          this.host = connection.host
+          this.serviceName = connection.serviceName
+          this.user = connection.user
+          this.password = connection.password
+          this.rememberConnection = connection.rememberConnection
+        }
       }
     },
     mounted () {

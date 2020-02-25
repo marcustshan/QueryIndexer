@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain } from 'electron'
+import { app, BrowserWindow, ipcMain, globalShortcut } from 'electron'
 import { Settings } from './settings.js'
 
 /**
@@ -16,7 +16,8 @@ const winURL = process.env.NODE_ENV === 'development'
 
 const settings = new Settings({
   defaults: {
-    windowSize: { width: 1700, height: 800 }
+    windowSize: { width: 1700, height: 800 },
+    workPath: 'C:\\'
   }
 })
 
@@ -36,20 +37,22 @@ function createWindow () {
     }
   })
 
+  globalShortcut.register('CommandOrControl+Shift+D', () => {
+    if (!mainWindow.isFocused()) {
+      return
+    }
+    if (mainWindow.webContents.isDevToolsOpened()) {
+      mainWindow.webContents.closeDevTools()
+    } else {
+      mainWindow.webContents.openDevTools()
+    }
+  })
+
+  mainWindow.setMenu(null)
+
   const path = require('path')
   const nativeImage = require('electron').nativeImage
   mainWindow.setIcon(nativeImage.createFromPath(path.join(__dirname, '../renderer/assets/icons/win/icon.ico')))
-
-  const fs = require('fs')
-  const themes = fs.readdirSync(path.join(__dirname, '../renderer/assets/css/themes'))
-  for (let i = 0; i < themes.length; i++) {
-    if (!themes[i].endsWith('.css')) {
-      themes.splice(i, 1)
-      i--
-    } else {
-      themes[i] = themes[i].split('.css')[0]
-    }
-  }
 
   if (settings.get('windowMaximized')) {
     mainWindow.maximize()
@@ -84,12 +87,16 @@ function createWindow () {
     settings.set('connection', connection)
   })
 
-  ipcMain.on('get_connection', (event) => {
-    mainWindow.webContents.send('get_connection', settings.get('connection'))
+  ipcMain.on('set_workPath', (event, workPath) => {
+    settings.set('workPath', workPath)
   })
 
-  ipcMain.on('get_themes', (event) => {
-    mainWindow.webContents.send('get_themes', themes)
+  ipcMain.on('get_connection', (event) => {
+    event.returnValue = settings.get('connection')
+  })
+
+  ipcMain.on('get_workPath', (event) => {
+    event.returnValue = settings.get('workPath')
   })
 }
 
